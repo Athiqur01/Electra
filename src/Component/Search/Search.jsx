@@ -1,14 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useEffect, useState } from "react";
 
 
-const Product = ({item}) => {
+const Search = ({item}) => {
 
-   
+    
+
 
     return (
-        <div>
-             <div className="card bg-base-100  shadow-xl">
+       <div>
+         <div className="card bg-base-100  shadow-xl">
                 <figure>
                      <img
                       className="w-full h-72"
@@ -27,8 +28,8 @@ const Product = ({item}) => {
             </div>
             </div>
             </div>
-        </div>
+       </div>
     );
 };
 
-export default Product;
+export default Search;
