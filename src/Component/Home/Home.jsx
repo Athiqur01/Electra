@@ -3,6 +3,7 @@ import { useLoaderData } from 'react-router-dom';
 import Search from '../Search/Search';
 import { useEffect, useState } from 'react';
 import FilterProduct from '../FilterProduct/FilterProduct';
+import Banner from '../Banner/Banner';
 
 const Home = () => {
 
@@ -54,7 +55,7 @@ const Home = () => {
 
 
      useEffect(()=>{
-        fetch(`http://localhost:5012/item?q=${searchTerm}`)
+        fetch(`https://electra-server-chi.vercel.app/item?q=${searchTerm}`)
         .then(res=>res.json())
         .then(data=>setSearchItem(data))
     }
@@ -62,7 +63,7 @@ const Home = () => {
     ,[searchTerm])
 
      useEffect(()=>{
-        fetch(`http://localhost:5012/shortedItem?q=${shortOrder}&page=${currentPage}&size=${itemsPerPage}`)
+        fetch(`https://electra-server-chi.vercel.app/shortedItem?q=${shortOrder}&page=${currentPage}&size=${itemsPerPage}`)
         .then(res=>res.json())
         .then(data=>setItems(data))
     }
@@ -85,7 +86,7 @@ const Home = () => {
     
 
     useEffect(()=>{
-        fetch(`http://localhost:5012/filterItem?brandName=${filters.brandName}&categoryName=${filters.categoryName}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&page=${currentPage}&size=${itemsPerPage}`)
+        fetch(`https://electra-server-chi.vercel.app/filterItem?brandName=${filters.brandName}&categoryName=${filters.categoryName}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&page=${currentPage}&size=${itemsPerPage}`)
         .then(res=>res.json())
         .then(data=>setItems(data))
     },[filters.brandName,filters.categoryName,filters.minPrice,filters.maxPrice,currentPage,itemsPerPage])
@@ -97,9 +98,12 @@ const Home = () => {
 
     return (
         <div>
-            <h2 className='text-4xl lg:text-6xl font-bold py-10'>Product</h2>
-           <div className='flex gap-6'> {/* this div flexes two div  */}
-           <aside className='w-[20%]'>
+
+            <Banner></Banner>
+
+            <h2 className='text-4xl lg:text-6xl font-bold py-10 md:py-14 lg:py-20'>Product</h2>
+           <div className='flex flex-col md:flex-row lg:flex-row gap-6'> {/* this div flexes two div  */}
+           <aside className='w-[100%] md:w-[20%] lg:w-[20%]'>
             {/* Search bar start */}
             <div>
                 <h2 className='text-center font-bold text-xl bg-blue-700 py-2 mb-4 text-white rounded-sm'>Search Product</h2>
@@ -137,10 +141,10 @@ const Home = () => {
             <div className='mt-10'>
             <h2 className='text-center font-bold text-xl bg-blue-700 py-2 mb-4 text-white rounded-sm'>Filter Product</h2>
             <form  action="">
-                <input onChange={handlefilter} name='brandName' value={filters.brandName} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Brand Name' />
-                <input onChange={handlefilter} name='categoryName' value={filters.categoryName} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3 ' type="text" placeholder='Product Catagory' />
-                <input onChange={handlefilter} name='minPrice' value={filters.minPrice} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Min Price' />
-                <input onChange={handlefilter} name='maxPrice' value={filters.maxPrice} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Max price' />
+                <input onChange={handlefilter} name='brandName' value={filters.brandName} className='bg-red-50 px-4 mx-2 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Brand Name' />
+                <input onChange={handlefilter} name='categoryName' value={filters.categoryName} className='bg-red-50 px-4 py-2 mx-2 font-semibold text-center rounded-sm mb-3 ' type="text" placeholder='Product Catagory' />
+                <input onChange={handlefilter} name='minPrice' value={filters.minPrice} className='bg-red-50 px-4 py-2 mx-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Min Price' />
+                <input onChange={handlefilter} name='maxPrice' value={filters.maxPrice} className='bg-red-50 px-4 py-2 mx-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Max price' />
             </form>
             
         </div>
@@ -150,7 +154,7 @@ const Home = () => {
             </aside>
             
             {/* Product section start */}
-            <div className='w-[80%]'>
+            <div className='w-[100%] md:w-[80%] lg:w-[80%]'>
             <section>
 
                 {
@@ -178,7 +182,7 @@ const Home = () => {
             {/* Product section end */}
             
             {/* Pagination start */}
-            <div className='space-x-3'>
+            <div className='space-x-3 py-10'>
             <button onClick={()=>currentPage>0 && setCurrentPage(currentPage-1)} className='px-3 py-1 border-red-50 border-2 bg-red-50 '>Prev</button>
                 {pages.map(page=><>
                                    <button onClick={()=>{setCurrentPage(page)}} className={currentPage===page? 'px-3 py-1 border-red-50 border-2 bg-red-500 ' :'px-3 py-1 border-red-50 border-2 bg-red-50 '}>{page}</button>

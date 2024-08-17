@@ -18,7 +18,7 @@ const router = createBrowserRouter([
       {
         path:'/',
         element:<Home></Home>,
-        loader:()=>fetch('http://localhost:5012/itemsCount')
+        loader:()=>fetch('https://electra-server-chi.vercel.app/itemsCount')
       }
     ]
   },
