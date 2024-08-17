@@ -2,6 +2,7 @@ import Product from '../Product/Product';
 import { useLoaderData } from 'react-router-dom';
 import Search from '../Search/Search';
 import { useEffect, useState } from 'react';
+import FilterProduct from '../FilterProduct/FilterProduct';
 
 const Home = () => {
 
@@ -12,6 +13,8 @@ const Home = () => {
     const [items,setItems]=useState(null)
     const [searchTerm, setSearchTerm]=useState('')
     const [searchItem, setSearchItem]=useState([])
+    const [shortOrder,setShortOrder]=useState('')
+    const [shortedItem, setShortedItem]=useState([])
     //const itemsPerPage=6
     const totalPages=Math.ceil(count/itemsPerPage)
     console.log(totalPages)
@@ -38,13 +41,18 @@ const Home = () => {
         setCurrentPage(0)
     }
 
+    const handleShortOrder=e=>{
+        setShortOrder(e.target.value)
+        console.log(e.target.value)
+    }
+
     
 
-    useEffect(()=>{
-        fetch(`http://localhost:5012/items?page=${currentPage}&size=${itemsPerPage}`)
-        .then(res=>res.json())
-        .then(data=>setItems(data))
-    },[currentPage,itemsPerPage])
+    // useEffect(()=>{
+    //     fetch(`http://localhost:5012/items?page=${currentPage}&size=${itemsPerPage}`)
+    //     .then(res=>res.json())
+    //     .then(data=>setItems(data))
+    // },[currentPage,itemsPerPage])
 
      useEffect(()=>{
         fetch(`http://localhost:5012/item?q=${searchTerm}`)
@@ -54,15 +62,26 @@ const Home = () => {
 
     ,[searchTerm])
 
-    console.log('search item',searchItem)
+     useEffect(()=>{
+        fetch(`http://localhost:5012/shortedItem?q=${shortOrder}&page=${currentPage}&size=${itemsPerPage}`)
+        .then(res=>res.json())
+        .then(data=>setItems(data))
+    }
+
+    ,[shortOrder,currentPage,itemsPerPage])
+
+    
 
 
     return (
         <div>
             <h2 className='text-4xl lg:text-6xl font-bold py-10'>Product</h2>
-
+           <div className='flex gap-6'> {/* this div flexes two div  */}
+           <aside className='w-[20%]'>
             {/* Search bar start */}
-            <div className='flex justify-end px-2 md:px-8 lg:px-10 mb-10 md:mb-14 lg:mb-20'>
+            <div>
+                <h2 className='text-center font-bold text-xl bg-blue-700 py-2 mb-4 text-white rounded-sm'>Search Product</h2>
+            <div className='flex justify-center mb-6 md:mb-8 lg:mb-10'>
             <label className="input input-bordered flex items-center gap-2 max-w-72">
             <input type="text" onChange={handleSearch} value={searchTerm} className="grow text-black" placeholder="Search" />
             <svg
@@ -77,10 +96,30 @@ const Home = () => {
             </svg>
             </label>
             </div>
-
+            </div>
             {/* Search bar end */}
+
+            {/* Short product start */}
+            <h2 className='text-center font-bold text-xl bg-blue-700 py-2 mb-4 text-white rounded-sm'>Sort Product</h2>
+            <select value={shortOrder} onChange={handleShortOrder}  className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm ' name="" id="">
+                <option value="" className='flex justify-center px-4 py-2 font-semibold text-center rounded-sm'></option>
+                <option value="asc" className='flex justify-center px-4 py-2 font-semibold text-center rounded-sm'>Price Low to High</option>
+                <option value="dsc" className='px-4 py-2 font-semibold text-center rounded-sm'>Price High to Low</option>
+                <option value="latest" className='px-4 py-2 font-semibold text-center rounded-sm'>Latest Product</option>
+            </select>
+
+            {/* short product end */}
+
+
+            {/* Filter product start */}
+           <FilterProduct></FilterProduct> 
+
+            {/* Filter product end */}
+
+            </aside>
             
             {/* Product section start */}
+            <div className='w-[80%]'>
             <section>
 
                 {
@@ -121,6 +160,8 @@ const Home = () => {
             </select>
             </div>
             {/* Pagination end */}
+            </div>
+         </div>
         </div>
     );
 };
