@@ -6,7 +6,7 @@ const FilterProduct = () => {
                                        brandName: '',
                                         categoryName: '',
                                         minPrice: '',
-                                    //    maxPrice: ''
+                                        maxPrice: ''
                                        })
 
     const handlefilter=e=>{
@@ -24,10 +24,10 @@ const FilterProduct = () => {
     console.log('filter',query)
 
     useEffect(()=>{
-        fetch(`http://localhost:5012/filterItem?brandName=${filters.brandName}&categoryName=${filters.categoryName}&minPrice=${filters.minPrice}`)
+        fetch(`http://localhost:5012/filterItem?brandName=${filters.brandName}&categoryName=${filters.categoryName}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}`)
         .then(res=>res.json())
         .then(data=>console.log('filtered product',data))
-    },[filters.brandName,filters.categoryName,filters.minPrice])
+    },[filters.brandName,filters.categoryName,filters.minPrice,filters.maxPrice])
 
     console.log('filter',query)
 
@@ -38,7 +38,7 @@ const FilterProduct = () => {
                 <input onChange={handlefilter} name='brandName' value={filters.brandName} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Brand Name' />
                 <input onChange={handlefilter} name='categoryName' value={filters.categoryName} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3 ' type="text" placeholder='Product Catagory' />
                 <input onChange={handlefilter} name='minPrice' value={filters.minPrice} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Min Price' />
-                {/* <input onChange={handlefilter} name='maxPrice' value={filter.maxPrice} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Max price' /> */}
+                <input onChange={handlefilter} name='maxPrice' value={filters.maxPrice} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Max price' />
             </form>
             
         </div>
