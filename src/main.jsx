@@ -9,6 +9,8 @@ import './index.css'
 import Root from './Component/Root.jsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Home from './Component/Home/Home.jsx';
+import LogIn from './Component/LogIn/LogIn.jsx';
+import Register from './Component/Register/Register.jsx';
 const queryClient = new QueryClient()
 const router = createBrowserRouter([
   {
@@ -19,6 +21,14 @@ const router = createBrowserRouter([
         path:'/',
         element:<Home></Home>,
         loader:()=>fetch('https://electra-server-chi.vercel.app/itemsCount')
+      },
+      {
+        path:"/login",
+        element:<LogIn></LogIn>
+      },
+      {
+        path:"/register",
+        element:<Register></Register>
       }
     ]
   },
