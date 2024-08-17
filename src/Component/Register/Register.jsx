@@ -1,8 +1,15 @@
 import { useForm } from "react-hook-form";
 import img from '../../assets/login.jpg'
+import { useContext } from "react";
+import { AuthContext } from "../../Provider/AuthProvider";
+import axios from "axios";
+import Swal from "sweetalert2";
+
 
 
 const Register = () => {
+
+    const {createUser,user,setUser,setLoading}=useContext(AuthContext)
 
     const {
         register,
@@ -12,6 +19,35 @@ const Register = () => {
 
       const onSubmit = (data) => {
         console.log(data)
+        const {email,displayName,photoURL}=data 
+         const userData={email,displayName,photoURL,userStatus}      
+        
+        createUser(data?.email,data?.password)
+        .then(result=>{
+            
+            console.log(result.user)
+            console.log('user---',user)
+            // if(result.user){
+                
+            //       axios.post("https://electra-server-chi.vercel.app/users",userData)
+            //       .then(res=>{
+            //         console.log(res.data)
+            //         if(res.data.insertedId){
+            //             Swal.fire({
+            //                 position: "top-center",
+            //                 icon: "success",
+            //                 title: "Register is successful",
+            //                 showConfirmButton: false,
+            //                 timer: 3500
+            //               });
+
+            //         }
+            //       })
+
+            // }
+            setLoading(false)
+
+        })
         
         
       }
