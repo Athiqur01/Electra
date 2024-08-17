@@ -15,6 +15,12 @@ const Home = () => {
     const [searchItem, setSearchItem]=useState([])
     const [shortOrder,setShortOrder]=useState('')
     const [shortedItem, setShortedItem]=useState([])
+    const [filters, setFilter]=useState({
+        brandName: '',
+         categoryName: '',
+         minPrice: '',
+         maxPrice: ''
+        })
     //const itemsPerPage=6
     const totalPages=Math.ceil(count/itemsPerPage)
     console.log(totalPages)
@@ -46,13 +52,6 @@ const Home = () => {
         console.log(e.target.value)
     }
 
-    
-
-    // useEffect(()=>{
-    //     fetch(`http://localhost:5012/items?page=${currentPage}&size=${itemsPerPage}`)
-    //     .then(res=>res.json())
-    //     .then(data=>setItems(data))
-    // },[currentPage,itemsPerPage])
 
      useEffect(()=>{
         fetch(`http://localhost:5012/item?q=${searchTerm}`)
@@ -69,6 +68,29 @@ const Home = () => {
     }
 
     ,[shortOrder,currentPage,itemsPerPage])
+
+    //API for filter----------
+
+    const handlefilter=e=>{
+        //setFilter(e.terger.value)
+        
+        setFilter({
+            ...filters,
+            [e.target.name]: e.target.value
+          });
+
+          
+    }
+
+    
+
+    useEffect(()=>{
+        fetch(`http://localhost:5012/filterItem?brandName=${filters.brandName}&categoryName=${filters.categoryName}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&page=${currentPage}&size=${itemsPerPage}`)
+        .then(res=>res.json())
+        .then(data=>setItems(data))
+    },[filters.brandName,filters.categoryName,filters.minPrice,filters.maxPrice,currentPage,itemsPerPage])
+
+    
 
     
 
@@ -112,7 +134,16 @@ const Home = () => {
 
 
             {/* Filter product start */}
-           <FilterProduct></FilterProduct> 
+            <div className='mt-10'>
+            <h2 className='text-center font-bold text-xl bg-blue-700 py-2 mb-4 text-white rounded-sm'>Filter Product</h2>
+            <form  action="">
+                <input onChange={handlefilter} name='brandName' value={filters.brandName} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Brand Name' />
+                <input onChange={handlefilter} name='categoryName' value={filters.categoryName} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3 ' type="text" placeholder='Product Catagory' />
+                <input onChange={handlefilter} name='minPrice' value={filters.minPrice} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Min Price' />
+                <input onChange={handlefilter} name='maxPrice' value={filters.maxPrice} className='bg-red-50 px-4 py-2 font-semibold text-center rounded-sm mb-3' type="text" placeholder='Max price' />
+            </form>
+            
+        </div>
 
             {/* Filter product end */}
 
