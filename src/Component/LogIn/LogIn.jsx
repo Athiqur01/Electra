@@ -1,23 +1,89 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaGithub, FaGoogle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import img from '../../assets/login.jpg'
+import { AuthContext } from '../../Provider/AuthProvider/AuthProvider';
+import Swal from 'sweetalert2';
+import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
 
 const LogIn = () => {
 
+  const {loginUser,setLoading,setUser,user,createGoogleUser}=useContext(AuthContext)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-      } = useForm()
+  const onSubmit = (data) => {
+    console.log(data)
+    loginUser(data.email,data.password)
+    .then(result=>{
+        console.log(result.user)
+        setUser(result.user)
+        setLoading(false)
+        if(result.user){
+        
+          Swal.fire({
+            position: "top-center",
+            icon: "success",
+            title: "Login successful",
+            showConfirmButton: false,
+            timer: 3500
+          })
+        }
+    })
+  }
 
-      const onSubmit = (data) => {
-        console.log(data)
-        
-        
-      }
+  const {refetch, data:allUser}=useQuery({
+    queryKey:['allUser'],
+    queryFn: async()=>{
+        const res=await axios.get('https://electra-server-chi.vercel.app/users')
+        setLoading(false)
+        return res.data
+    }
+  })
+
+  
+
+  const handleGoogleSignIn=()=>{
+
+    createGoogleUser()
+    .then(result=>{
+    setUser(result.user)
+
+    const email=result?.user?.email
+  const displayName=result?.user?.displayName
+  const photoURL=result?.user?.photoURL
+  const userStatus='user'
+
+  const userData={email,displayName,photoURL,userStatus} 
+  console.log(userData)
+
+    if(result.user){
+            
+      axios.post("https://electra-server-chi.vercel.app/users",userData)
+      .then(res=>{
+        console.log(res.data)
+        if(res.data){
+            Swal.fire({
+                position: "top-center",
+                icon: "success",
+                title: "Login is successful",
+                showConfirmButton: false,
+                timer: 3500
+              });
+
+        }
+      })
+
+}
+    setLoading(false)
+    })
+  }
+
 
 
 
@@ -72,7 +138,7 @@ const LogIn = () => {
       </div>
       <div>
       <div className="flex justify-center gap-4 pb-8">
-                        <button   className="pr-4 text-2xl"><FaGoogle /></button>
+                        <button onClick={handleGoogleSignIn}  className="pr-4 text-2xl"><FaGoogle /></button>
                         <button className="pl-4 text-2xl"><FaGithub /></button>
                     
                     </div>
